@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pretext xml:lang="en-US">
+  <article xml:id="apostila-grafos">
+    <title>Grafos e SageMath</title>
+    <frontmatter xml:id="fm">
+
+      <titlepage>
+
+        <author>
+          <personname>Monique R. do Nascimento</personname>
+
+          <department>Departmento de Eletrônica e Computação</department>
+
+          <institution>
+            <line>Universidade Federal de Santa Maria</line>
+            <line>Santa Maria, RS</line>
+          </institution>
+          <email>moniquee.rn@hotmail.com</email>
+        </author>
+
+        <author>
+          <personname>Vinicius S. Monego</personname>
+
+          <department>Departamento de Eletrônica e Computação</department>
+
+          <institution>
+            <line>Universidade Federal de Santa Maria</line>
+            <line>Santa Maria, RS</line>
+          </institution>
+          <email>monego@posteo.net</email>
+        </author>
+
+        <author>
+          <personname>Alice J. Kozakevicius</personname>
+
+          <department>Departmento de Matemática</department>
+
+          <institution>
+            <line>Universidade Federal de Santa Maria</line>
+            <line>Santa Maria, RS</line>
+          </institution>
+          <email>alice.kozakevicius@gmail.com</email>
+        </author>
+
+        <date><today /></date>
+
+      </titlepage>
+
+      <abstract>
+        <p>Apostila para um minicurso de um dia sobre Grafos usando o <url href="http://www.sagemath.org/">SageMath</url>.</p>
+      </abstract>
+
+      </frontmatter>
+
+      <section id="intro">
+        <title>Introdução</title>
+
+        <p>A disciplina de Matemática Discreta, que faz parte de muitos currículos de graduação, incluindo Licenciatura e Bacharelado em Matemática, Ciência da Computação e Sistemas de Informação, traz em sua súmula uma introdução à Teoria de Grafos. Em cursos tecnológicos, esse assunto ainda é explorado de forma computacional. Já no contexto dos cursos de Matemática, a teoria de Grafos quase nunca é revisitada em outras disciplinas de graduação e seus aspectos computacionais praticamente não são abordados ou são omitidos.</p>
+
+        <p>Esta proposta de minicurso tem como objetivo principal apresentar uma alternativa computacional e divulgá-la, especialmente no contexto dos cursos de Licenciatura e Bacharelado em Matemática, como sendo uma ferramenta eficiente para o ensino e aprendizagem da teoria de Grafos. Além disso, como consequência, tem-se também como meta promover uma familiarização dos alunos com ferramentas computacionais que permitam explorar a teoria de Grafos de forma mais ampla, dando espaço a aspectos que envolvam aplicações e modelagem.</p>
+
+        <p>Existem muitas opções de pacotes computacionais para explorar além de Grafos, outros tópicos das mais variadas disciplinas da graduação. No entanto, neste minicurso opta-se pelo SageMath. O SageMath é um Sistema de Álgebra Computacional (do inglês Computer Algebra System — CAS) de código livre construído por muitos pacotes livres distintos unidos em uma interface Python. Sua missão é ser uma alternativa livre aos CAS proprietários tradicionais, como MATLAB ou Mathematica. Além disso, pelo fato de poder ser utilizado de forma on-line, dispensando toda a parte de instalação, o SageMath acaba sendo muito mais amigável e viável de
+        ser utilizado nos mais diferentes ambientes.</p>
+
+        <p>Neste minicurso serão utilizados recursos do SageMath que permitam a definição, visualização e manipulação de grafos. O material apresentado nesta proposta ainda será espandido em um 1tutorial a ser entregue aos participantes do minicurso durante o EREMATSUL 2014 e os tópicos abordados estão baseados nos conceitos e definições do livro Introdução à Análise Combinatória do autor J. Plínio O. Santos <xref ref="plinio" />, capítulo 8.</p>
+
+        <p>A seguir apresentam-se os passos principais para se trabalhar nesse ambiente computacional, uma vez que o aplicativo será utilizado "na nuvem", dispensando a necessidade de instalá-lo. Logo após, os principais conceitos e definições da teoria de Grafos serão explorados via SageMath. As instruçõeas necessárias para a geração dos grafos e sua manipulação serão apresentadas nesta proposta de forma sucinta e tratadas de forma mais detalhada ao longo do minicurso proposto.</p>
+
+      </section>
+
+      <section id="registro">
+        <title>Cadastro no CoCalc</title>
+
+      <note>Este material pode ser usado de várias formas. A apostila online já contém todo o necessário para o decorrer do minicurso. Caso haja interesse em explorar a ferramenta mais a fundo, sugere-se o uso do CoCalc.</note>
+
+      <ol>
+	<li>A forma mais fácil de usar o SageMath através do <url href="https://cocalc.com/app">CoCalc</url>.</li>
+	<li>Cadastro do usuário:</li>
+	<li><ul>
+	  <li>Se for novo usuário: concordar com os termos de serviço, preencher os dados e clicar em "Sign Up!". Também pode-se fazer login com contas de terceiros (Facebook, GitHub, Google, Twitter)</li>
+	  <li>Se já estiver cadastrado, apenas entrar na página informando email e senha.</li>
+	</ul></li>
+      </ol>
+
+      </section>
+
+      <section id="cocalc">
+        <title>Utilização do CoCalc</title>
+
+	<p>Clicar na opção "New Project" e dar nome ao projeto na linha da opção correspondente (será aberta uma janelinha para estas informações). Automaticamente o projeto criado aparecerá na sua lista de projetos existentes.</p>
+
+	<p>Abrir o projeto e clicar em "New" para criar um novo arquivo ou diretório. Clicar em "Sage Worksheet" para abrir uma planilha (espaço de trabalho).</p>
+
+	<p>É possível criar outro tipo de arquivo, como um arquivo <m>\LaTeX</m> na opção "LaTeX Document" ou um arquivo de texto na opção "File". Para criar outro tipo de arquivo dentro de um mesmo projeto, é só clicar em “New” e escolher a opção desejada (Sage Worksheet, IPython Notebook, File, Folder, From Internet, LaTeX Document , Terminal, Task List).</p>
+
+      </section>
+
+      <section id="projeto">
+	<title>Trabalhar em projeto já existente</title>
+
+	<p>Para abrir o projeto é preciso clicar em "Projects" e clicar no projeto que deseja abrir. Aparecerão todos os arquivos e diretórios criados dentro do projeto. É só clicar na opção que desejar abrir.</p>
+
+	<p>Uma planilha no Sage é composta por várias células onde se escrevem códigos. Pode-se pensar nessas células como sendo linhas com uma ou mais instruções. Para avaliar cada célula individualmente, é necessária a combinação de teclas <c>&lt;shift&gt; + &lt;enter&gt;</c> no final de cada instrução. Isso fará com que o resultado da célula (instrução) apareça em uma janela. Este comendo será considerado sempre que se desejar visualizar os resultados das operações em questão.</p>
+
+      </section>
+
+      <section id="grafos">
+        <title>Grafos com o SageMath</title>
+
+      <p>Depois de criar o projeto e a planilha, pode-se começar a construir e manipular grafos. Antes de sua definição ser apresentada, exploram-se alguns exemplos de grafos pré-definidos, para motivar os conceitos.</p>
+
+      <p>Para obter-se a lista disponível dos exemplos de grafos pré-definidos no CoCalc, digita-se (no CoCalc): <c>graphs.&lt;tab&gt;</c></p>
+
+      <p>Assim, logo após teclar <c>&lt;tab&gt;</c>, um menu com os diferentes exemplos aparecerá. Basta selecionar com o mouse alguma das opções. A primeira delas é Balaban10Cage. Para chamar o método que define este grafo, deve-se digitar parêntesis aberto e fechado após o nome escolhido, como ilustrado a seguir:</p>
+
+      <sage>
+        <input>
+          graphs.Balaban10Cage()
+        </input>
+	<output>
+	  Balaban 10-cage: Graph on 70 vertices (use the .plot() method to plot)
+	</output>
+      </sage>
+
+      <p>Dentro dos parêntesis são colocados os argumentos do método. Neste caso, estamos chamando um método sem argumentos.</p>
+
+      <subsection id="visualizacao">
+        <title>Visualização de Grafos</title>
+
+        <p>Para visualizar o grafo recém definido, utiliza-se o método plot(), da seguinte forma:</p>
+
+        <sage>
+          <input>
+            graphs.Balaban10Cage().plot()
+          </input>
+        </sage>
+
+	<figure xml:id="fig-balaban10cage">
+	  <caption>Grafo Balaban10Cage</caption>
+	  <image width="75%" source="figs/1-balaban10cage.png">
+	    <description>Grafo Balaban10Cage</description>
+	  </image>
+	</figure>
+
+        <p>Observação: Se no final desta célula não for dada a instrução &lt;shift&gt;+&lt;enter&gt;, o gráfico associado ao grafo do exemplo escolhido não será apresentado na janela.</p>
+
+        <p>Por conveniência, pode-se atribuir o grafo a uma variável:
+
+        <sage>
+          <input>
+            a = graphs.Balaban10Cage()
+          </input>
+        </sage>
+
+        sendo <c>a</c> uma variável arbitrária que a partir desse momento recebe um objeto do tipo grafo.</p>
+
+        <p>Assim, pode-se visualizar o grafo utilizando a variável a associada ao método <c>plot()</c>:</p>
+
+        <sage>
+          <input>
+            a.plot()
+          </input>
+        </sage>
+
+	<figure xml:id="fig-balaban10cage2">
+	  <caption>Grafo Balaban10Cage</caption>
+	  <image width="75%" source="figs/1-balaban10cage.png">
+	    <description>Grafo Balaban10Cage</description>
+	  </image>
+	</figure>
+	
+        <p>Para se obter uma representação 3D do grafo contido na variável <c>a</c>, utiliza-se:</p>
+
+        <sage>
+          <input>
+            a.plot3d()
+          </input>
+        </sage>
+
+        <p>É possível aumentar ou diminuir o tamanho do grafo, considerando-se a barra de rolagem do mouse. Para que o grafo seja rotacionado, basta segurar o mouse sobre a figura e movimentá-lo.</p>
+
+      </subsection>
+
+      <subsection id="defgrafo">
+        <title>Definição de um grafo qualquer</title>
+
+        <definition xml:id="def-1">
+          <p>Um grafo G = (V, A) é constituído por um conjunto finito não vazio V c N de vértices (ou nós) e um conjunto A de arestas (ou arcos), contendo as ligações entre estes vértices.</p>
+        </definition>
+
+        <p>Graficamente, cada vértice é representado no SageMath por um círculo e cada aresta é representada por uma linha ligando estes círculos, como visto nos exemplos dados na seção anterior.</p>
+
+        <p>Cada aresta, denotada por <m>{i,j}</m>, é um par não-ordenado de vértices distintos. Se uma aresta corresponde ao par de vértices <m>{i,j}</m> dizemos que <m>i</m> e <m>j</m> são as extremidades desta aresta.</p>
+
+        <p>Define-se computacionalmente um grafo <m>G = (V, A)</m> a partir dos seus conjuntos de vértices <m>V</m> e arestas <m>A</m>, associando estes conjuntos a uma variável "d": <c>d = {0: [3], 1: [2], 2: [3], 3: [4]}</c> sendo sendo {0, 1, 2, 3, 4} o conjunto <m>V</m> dos vértices. A notação <c>0: [3]</c> significa que o vértice 0 tem uma aresta ligada em 3, <c>1: [2]</c> significa que o vértice 1 tem uma aresta ligada no vértice 2, e assim por diante. No Python, a estrutura dada em <c>d</c> é conhecida como dicionário, que é uma lista associativa. A cada palavra-chave, que são os vértices individuais, associa-se uma lista de outros vértices aos quais este será ligado.</p>
+
+        <p>Agora para se construir o grafo a partir do dicionário definido em <m>d</m>, usa-se o comando <c>G = Graph(d)</c>:</p>
+
+        <sage>
+          <input>
+            d = {0: [3], 1: [2], 2: [3], 3: [4]} # Definição do conjunto de vértices e arestas
+            G = Graph(d) # Construção do grafo
+            G.plot() # Visualização do grafo
+            # shift+enter para aparecer o resultado na janela
+          </input>
+        </sage>
+
+        <p>Também pode-se definir o dicionário anterior da seguinte forma:</p>
+
+        <sage>
+          <input>
+            e = {2: [1], 3: [0, 2, 4]} # Definição do conjunto de vértices e arestas
+            G = Graph(e) # Construção do grafo
+            G.plot() # Visualização do grafo
+            # shift+enter para aparecer o resultado na janela
+          </input>
+        </sage>
+
+	<p>Os dois comandos produzirão o mesmo grafo, no entanto agora o dicionário <m>e</m> contém todas as ligações do vértice 3 em uma única lista.</p>
+
+	<p>Uma terceira forma de se criar o mesmo grafo é a partir de um grafo vazio e adicionar os vértices e arestas por partes. Esse processo é ilustrado na Figura 1. A Figura 1(a) apresenta a inserção da primeira aresta, incidente aos vértices 1 e 2. Assim, pode-se considerar o grafo <c>G</c>, representado neste estágio, como sendo composto por 4 subgrafos, cada um desconexo dos demais. Conforme mais arestas são inseridas, o número de subgrafos desconexos vai diminuindo, até que apenas uma única componente conexa seja obtida no final do processo.</p>
+
+	<p>Para se criar um grafo vazio, usa-se: <c>G=Graph()</c>. Abaixo reproduz-se o grafo <c>G</c>, inserindo as arestas uma a uma.</p>
+
+	<sage>
+	  <input>
+	    G = Graph()
+	    G.add_vertices([0,1,2,3,4])
+	    plot1 = G.plot(layout='circular',graph_border=True)
+	    G.add_edge((2,1))
+	    plot2 = G.plot(layout='circular',graph_border=True)
+	    G.add_edge((3,0))
+	    plot3 = G.plot(layout='circular',graph_border=True)
+	    G.add_edge((3,2))
+	    plot4 = G.plot(layout='circular',graph_border=True)
+	    G.add_edge((3,4))
+	    plot5 = G.plot(layout='circular',graph_border=True)
+	    graphics_array(((plot1, plot2, plot3), (plot4, plot5, Graph().plot()))).show()
+	  </input>
+	</sage>
+
+	<observation>
+	  De acordo com a <xref ref="def-1" />, o conjunto de vértices de <m>G</m> não poderia ser um conjunto vazio. No entanto, computacionalmente, o que se cria através da instrução <c>G=Graph()</c>, quando um grafo vazio é definido, é uma estrutura pronta para receber os conjuntos de vértices e arestas. Assim, podemos inserir novos vértices e arestas dentro desta estrutura já pronta.
+	</observation>
+
+	<observation>
+	  O grafo final <c>plot5</c> é idêntico ao grafo obtido no Exemplo 1, isto é, tanto o conjunto de vértices quanto o conjunto de arestas são os mesmos. No entanto suas representações gráficas diferem em relação à posição na qual os vértices foram dispostos. Isso ocorre devido ao fato de um mesmo grafo poder ter várias representações planares.
+	</observation>
+
+	<observation>
+	  No SageMath, a cada vez que desenhamos um grafo, seus vértices são apresentados em um espaço livre e dispostos de acordo com a escolha feita automaticamente pelo método plot. Uma forma de fixar essas posições é através da opção <c>layout='circular'</c>, que dispõe os vértices em forma circular dentro de uma região quadrada. Essa opção foi usada para uniformizar os 5 grafos da Figura 1.
+	</observation>
+
+	<definition>
+	  Uma aresta <m>\{i,j\}</m> é incidente nos vértices <m>i</m> e <m>j</m>. Analogamente, dizemos que um vértice é incidente nas arestas às quais está associado.
+	</definition>
+
+	<p>No exemplo 1, o vértice 1 é incidente na aresta <m>\{1,2\}</m>. A aresta <m>\{2,3\}</m> é incidente nos vértices 2 e 3. Quando um vértice não está associado a nenhum outro vértice é chamado de nó isolado, logo não exite aresta incidente a esse vértice.</p>
+
+	<definition>
+	  Duas arestas incidentes num mesmo vértice são chamadas adjacentes e dois vértices incidentes numa mesma aresta também são adjacentes.
+	</definition>
+
+	<p>No exemplo 1, os vértices 2 e 3 são adjacentes e as arestas 1,2 e 2,3 são adjacentes.</p>
+
+	<definition>
+	  O grau de um vértice é o número de arestas incidentes neste vértice.
+	</definition>
+
+	<p>Pode-se pensar no grau de um vértice como sendo a função</p>
+
+	<p>
+	  <men>
+	    gr : V \rightarrow \math{N} \\
+	    i             gr(i) = n_i
+	  </men>
+	</p>
+
+	<theorem>
+	  <p>A soma dos vértices de um grafo é igual ao dobro do número de arestas.</p>
+	</theorem>
+
+      </subsection>
+
+      <subsection>
+	<title>Matriz de Adjacência e Matriz de Incidência</title>
+
+	<p>Dado um grafo <m>G</m>, as ligações entre seus vértices (arestas) podem ser representadas por duas matrizes: a matriz de adjacência <m>vértice \times vértice</m> e a matriz de incidência <m>vértice \times aresta</m>.</p>
+
+	<definition>
+	  A matriz de adjacência tem linhas e colunas associadas aos vértices. O elemento na linha i e coluna j é o número de arestas que têm os vértices i e j como suas extremidades.
+	</definition>
+
+	<definition>
+	  Na matriz de incidência as linhas estão associadas aos vértices e as colunas, às arestas. O elemento na linha i e coluna j é 1 se o vértice i é incidente na aresta j e 0, caso contrário.
+	</definition>
+
+	<p>O comando para mostrar a matriz de adjacência é: <c>G.adjacency_matrix()</c>. A matriz de adjacência do Exemplo 1 é:</p>
+
+	<sage>
+	  <input>
+	    G.adjacency_matrix()
+	  </input>
+	  <output>
+	    [0 0 0 1 0]
+	    [0 0 1 0 0]
+	    [0 1 0 1 0]
+	    [1 0 1 0 1]
+	    [0 0 0 1 0]
+	  </output>
+	</sage>
+
+	<p>Tanto as linhas quanto as colunas da matriz <m>Adj</m> representam os vértices do grafo <m>G</m>. A primeira linha está associada ao primeiro vértice, neste exemplo indexado por 0. Esta linha indica todas as conexões existentes entre o vértice 0 e os demais vértices do grafo. Dessa forma, cada uma das demais linhas apresentará as ligações do vértice associado à linha com os demais. A matriz de adjacência é uma matriz simétrica, cujos elementos da diagonal são todos nulos, já que em um grafo não são permitidas ligações de um vértice com ele mesmo.</p>
+
+	<p>A matriz de incidência do Exemplo 1 é: <c>G.incidence_matrix()</c>. A matriz de incidência do Exemplo 1 é:</p>
+
+	<sage>
+	  <input>
+	    G.incidence_matrix()
+	  </input>
+	  <output>
+	    [1 0 0 0]
+	    [0 1 0 0]
+	    [0 1 1 0]
+	    [1 0 1 1]
+	    [0 0 0 1]
+	  </output>
+	</sage>
+
+	<p>Cada linha da matriz Inc representa um vértice e cada coluna representa uma aresta. A primeira linha está associada ao vértice 0, indicando por 1 na coluna j se o vértice 0 é incidente à aresta j. Naturalmente, as demais linhas são construídas seguindo o mesmo critério. Esta matriz não é necessariamente simétrica.</p>
+
+	<observation>
+	  No SageMath a matriz de incidência <m>Inc</m> de um grafo já traz em sua definição padrão o conceito de orientação. Para tal, a matriz apresenta o valor -1 associado ao vértice considerado como origem da aresta. Para indicar a extremidade final da aresta, o valor 1 é considerado.
+	</observation>
+
+      </subsection>
+
+      <subsection>
+	<title>Definição de G via matrizes</title>
+
+	<p>Um grafo pode ser definido no Sage também através de qualquer uma de suas matrizes (incidência ou adjacência). Dentro das atividades do minicurso, serão abordados exemplos nos quais as matrizes são informadas inicialmente e essas informações são então associadas aos Grafos.</p>
+
+      </subsection>
+
+      <subsection>
+	<title>"Caminhando" nos grafos</title>
+
+	<p>Nesta seção são dadas as definições de passeio, caminho, circuito e ciclo, que correspondem a conceitos importantes da teoria com relevância para as aplicações.</p>
+
+	<definition>
+	  Um passeio entre os vértices i e j de um grafo é uma sequência alternante de vértices e arestas começando em um dos vértices i, j e terminando no outro, tal que cada aresta é incidente aos vértices que a cercam na sequência.
+	</definition>
+
+	<definition>
+	  Um caminho é um passeio que não contém nós repetidos.
+	</definition>
+
+	<definition>
+	  Um circuito é um um passeio fechado, isto é, entre dois nós idênticos.
+	</definition>
+
+	<definition>
+	  Um ciclo é um caminho fechado, isto é, um passeio que contém exatamente dois vértices iguais, o primeiro e o último.
+	</definition>
+
+	<p>Os elementos apresentados nestas definições são reconhecidos via exemplos produzidos com comandos do SageMath.</p>
+
+	<p>Para adicionar um caminho, utilizamos o método <c>add_path()</c></p>
+
+	<sage>
+	  <input>
+	    G = Graph() # Cria um grafo vazio
+	    G.add_vertices([0,1,2,3]) # Adiciona os vértices de 0 a 3, sem conexões
+	    G.add_path([0,1,3,2,1]) # Adiciona um caminho {0,1,3,2,1}
+	    G.plot()
+	  </input>
+	</sage>
+
+	<p>Todos os caminhos disponíveis de um vértice inicial a um vértice final podem ser vistos usando-se o método all_paths, passando-se o vértice de saída e o vértice de chegada como parâmetros. Por exemplo, para o grafo logo acima:</p>
+
+	<sage>
+	  <input>
+	    G.all_paths(0,3)
+	  </input>
+	  <output>
+	    [[0, 1, 2, 3], [0, 1, 3]]
+	  </output>
+	</sage>
+
+	<p>Isso significa que para sair do vértice 0 e chegar no vértice 3, pode-se percorrer tanto o caminho {0,1,2,3} quanto o caminho {0,1,3}, e estes são os únicos caminhos possíveis para este grafo. Para adicionar um ciclo, utiliza-se o método <c>add_cycle()</c>.</p>
+
+	<sage>
+	  <input>
+	    G = Graph() # Cria um grafo vazio
+	    G.add_vertices([0,1,2,3,4,5]) # Adiciona os vértices de 0 a 5, sem conexões
+	    G.add_cycle([0,1,2]) # Adiciona um ciclo {0,1,2}
+	    G.add_cycle([3,4,5]) # Adiciona um ciclo {3,4,5}
+	    G.plot()
+	  </input>
+	</sage>
+
+	<p>Com os vértices de 0 a 5 pode-se criar um único ciclo da seguinte maneira:</p>
+
+	<sage>
+	  <input>
+	    G.add_cycle([0,1,2,3,4,5]) # Adiciona um ciclo {0,1,2,3,4,5}
+	    G.plot()
+	  </input>
+	</sage>
+
+      </subsection>
+
+      <subsection>
+	<title>Digrafo</title>
+
+	<definition>
+	  Um digrafo <m>G = (V,A)</m> é constituído por um conjunto finito de vértices <m>V</m> e um conjunto <m>A</m> de arestas direcionadas, de tal forma que exista uma correspondência biunívoca (1-1) entre os elementos de A e um subconjunto do produto cartesiano <m>N \times N</m> que não contenha os pares <m>(i, i)</m>. Cada aresta direcionada corresponde a um par ordenado de vértices.
+	</definition>
+
+	<p>Neste caso o conceito de incidência é modificado e a aresta correspondente ao par <m>(i,j)</m> é incidente do vértice <m>i</m> e incidente para o vértice <m>j</m>, e a direção da aresta é indicada graficamente como uma seta no vértice <m>j</m>.</p>
+
+	<p>O grau de entrada de um vértice é o número de arestas que entram no vértice, ou seja, são incidentes para o vértice e o grau de saída é definido de maneira análoga.</p>
+
+	<p>Em um digrafo são dados novos conceitos dependentes da orientação: passeio orientado e caminho orientado de um vértice <m>i</m> para um vértice <m>j</m>. A diferença agora é que há uma orientação para o passeio ou caminho, e com isso cada aresta na sequência é incidente do vértice que o precede para o vértice que o sucede na sequência. Para construir um digrafo no SageMath usamos o construtor de classe <c>DiGraph()</c>. Exemplo:</p>
+
+	<sage>
+	  <input>
+	    h = {0: [1,3], 1: [2], 2: [0,3]} # vértices e arestas direcionadas
+	    R = DiGraph(h) # Construção do grafo
+	    R.plot() # Vizualização do grafo
+	  </input>
+	</sage>
+
+	<p>O SageMath possui exemplos de digrafos pré-definidos. A lista dos exemplos pré-definidos disponíveis é obtida digitando-se: <c>digraphs.tab</c>. Assim, analogamente ao que foi feito para a obtenção de exemplos de grafos, logo após teclar tab, um menu com os diferentes exemplos aparecerá. Basta selecionar com o mouse alguma das opções. A segunda da lista fornecida é Circuit. Para chamar este método que gerará o exemplo, deve-se colocar como argumento o número de vértices que o digrafo deve ter, como ilustrado a seguir:</p>
+
+	<sage>
+	  <input>
+	    G=digraphs.Circuit(3)
+	    G.plot()
+	  </input>
+	</sage>
+
+      </subsection>
+
+      <subsection>
+	<title>Multigrafo</title>
+
+	<p>Outro elemento básico e relevante na teoria de grafos que será explorado no minicurso, são os multigrafos, que são grafos nos quais são permitidos dois ou mais arcos associados a um mesmo par de vértices. Quando os dois vértices do par não-ordenado, que definem a aresta, não forem distintos, esta aresta será dita um laço, como mostra o Exemplo a seguir. Para se criar um multigrafo no SageMath, é necessário passar uma opção que permita que o grafo tenha mais de uma aresta associada a um mesmo par de vértices: <c>a = Graph(multiedges=True)</c>. Exemplo:</p>
+
+	<sage>
+	  <input>
+	    d = {0: [0,1], 1: [2,2]}
+	    J = Graph(multiedges=True)
+	    J = Graph(d)
+	    J.plot(layout='circular')
+	  </input>
+	</sage>
+
+	<subsection>
+	  <title>Pontes de Königsberg</title>
+
+	  <p>Problema resolvido por Euler em 1736 sobre a possibilidade de fazer um passeio pela cidade de Königsberg, começando e terminando no mesmo lugar, cruzando cada ponte exatamente uma vez. O problema foi transformado em um multigrafo, mostrado abaixo, onde cada margem e ilha representa um vértice e cada ponte uma aresta.</p>
+
+	  <sage>
+	    <input>
+	      d = {0: [1,2,3], 1: [2,2], 2: [3,3]}
+	      J = Graph(multiedges=True)
+	      J = Graph(d)
+	      J.plot()
+	    </input>
+	  </sage>
+
+	  <p>A solução para o problema seria achar um circuito que percorra cada arco exatamente uma vez. Os (multi)grafos para os quais isto é possível são chamados de eulerianos.</p>
+
+	  <definition>
+	    O (multi)grafo conexo G = (V, A) é euleriano se, e somente se, os graus de todos os nós de G são pares.
+	  </definition>
+
+	  <p>Portanto o problema não apresenta solução já que o grau de seus nós não são todos pares, 0, 1 e 3 têm grau 3 e 2 tem grau 5.</p>
+
+	</subsection>
+
+      </subsection>
+
+      <subsection>
+	<title>Planaridade</title>
+
+	<definition>
+	  Um grafo é planar se é possível desenhá-lo no plano de modo que as linhas correspondentes aos arcos não se cruzem.
+	</definition>
+
+	<p>O desenho é uma realização gráfica planar do grafo, ou, simplismente, realização planar. No exemplo 5, no desenho à esquerda o grafo parece não satisfazer a condição, porém podemos desenhá-lo de forma a ver que se trata de um grafo planar, como é mostrado no desenho à direita.</p>
+
+	<p>Para sabermos se o grafo é planar usamos o método: <c>G.is_planar()</c>. Exemplo:</p>
+
+	<sage>
+	  <input>
+	    d = {0: [1,2,3], 1: [0,2,3], 2: [0,1,3], 3: [0,1,2]}
+	    G = Graph(d)
+	    G_notplanar = G.plot(title="Representação não planar")
+	    G_planar = G.plot(layout='planar', title="Representação planar")
+	    graphics_array([G_notplanar, G_planar]).show()
+	  </input>
+	</sage>
+
+	<p>Usando o método <c>G.is_planar()</c> para o grafo do Exemplo 5 teremos como resposta "True", ou seja, o grafo é planar.</p>
+
+	<p>Veremos agora outro exemplo, de um grafo bipartido completo.</p>
+
+	<sage>
+	  <input>
+	    d = {0: [3,4,5], 1: [3,4,5], 2: [3,4,5]}
+	    H = Graph(multiedges=True)
+	    H = Graph(d)
+	    H.plot()
+	  </input>
+	</sage>
+
+	<definition>
+	  Grafos bipartidos são aqueles nos quais o conjunto de vértices V pode ser particionado em dois subconjuntos de tal maneira que vértices pertencentes a um mesmo subconjunto não são adjacentes.
+	</definition>
+
+	<definition>
+	  O grafo bipartido completo contém todos as arestas possíveis, ou seja, se <m>V_1</m> e <m>V_2</m> são subconjuntos de vértices do conjunto <m>V</m>, então cada vértice de <m>V_1</m> é adjacente a todos os vértices de <m>V_2</m> . A notação para este tipo de grafo é <m>K_{n,l}</m>, onde <m>n</m> é a cardinalidade de <m>V_1</m> e l é a cardinalidade de <m>V_2</m>.
+	</definition>
+
+	<p>Usando o método <m>G.is\_planar()</m> para o grafo do Exemplo 6 teremos como resposta "False". O grafo não é planar então não podemos representá-lo graficamente em um plano sem que suas aresta se cruzem.</p>
+
+      </subsection>
+
+      <subsection>
+	<title>Isomorfismo</title>
+
+	<definition>
+	  Dois grafos <m>G=(V_1 , A_1)</m> e <m>H=(V_2 , A_2)</m> são isomorfos se existe uma relação 1-1 entre os vértices <m>V_1</m> e <m>V_1</m> que preserva adjacência, ou seja, se <m>i</m> e <m>j</m> em <m>V_1</m> são adjacentes em <m>G</m>, então os nós correspondentes em <m>V_2</m> pela relação também são adjacentes em <m>H</m> e vice versa.
+	</definition>
+
+	<p>Grafos isomorfos são grafos que não são iguais, mas apresentam as mesmas propriedades estruturais (número de vértices e arestas, grau dos vértices, conectividade e planaridade).</p>
+
+	<p>No Sage, para sabermos se dois grafos <m>G</m> e <m>H</m> são isomorfos usamos o comando: <m>G.is_isomorphic(H)</m></p>
+
+	<sage>
+	  <input>
+	    d = {0: [1,2,4,5], 1: [2,3,5], 2: [3,4], 3: [4,5], 4:[5]}
+	    G = Graph(d)
+	    G.plot()
+	  </input>
+	</sage>
+
+	<sage>
+	  <input>
+	    d = {6: [7,8,9,10], 7: [8,10,11], 8: [9,11], 9: [10,11], 10:[11]}
+	    H = Graph(d)
+	    H.plot()
+	  </input>
+	</sage>
+
+	<sage>
+	  <input>
+	    G.is_isomorphic(H)
+	  </input>
+	  <output>
+	    True
+	  </output>
+	</sage>
+
+	<p>Usando o método <c>G.is_isomorphic(H)</c> para os grafos do Exemplo 7 teremos como resposta “true”, ou seja, os grafos são isomorfos.</p>
+
+      </subsection>
+
+    </section>
+
+    <backmatter xml:id="backmatter">
+      <title>Referências</title>
+
+      <references>
+        <title>Referências</title>
+
+        <biblio type="raw" xml:id="plinio">SANTOS, J. Plínio O.; MELLO, Margarida P.; MURARI, Idani T. C.;<title>Introdução à Análise Combinatória</title>. Campinas, Editora da Unicamp, 1995</biblio>
+
+      </references>
+
+    </backmatter>
+
+  </article>
+</pretext>
